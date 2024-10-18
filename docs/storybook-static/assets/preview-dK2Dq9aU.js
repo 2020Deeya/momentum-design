@@ -1,4 +1,4 @@
-import{s as d}from"./chunk-L4EGOTBX-ars-O5a7.js";import"./entry-preview-BTbO7y0k.js";import{k as r}from"./lit-element-CPYlYYac.js";import"./index-BfB9Gei2.js";import"./index-xE1mO55Y.js";import"./index-DrFu-skq.js";import"./index-BLShQaRP.js";import"./state-I_twzcUk.js";import"./create-context-89xeped_.js";import"./iconprovider.component-DlI5gUhJ.js";const l="1.0.0",c="",m=[{kind:"javascript-module",path:"components/avatar/avatar.component.js",declarations:[{kind:"class",description:"",name:"Avatar",slots:[{description:"This is a default/unnamed slot",name:""}],members:[{kind:"field",name:"type",type:{text:"AvatarType | undefined"},attribute:"type",reflects:!0},{kind:"field",name:"alt",type:{text:"string | undefined"},attribute:"alt"},{kind:"field",name:"src",type:{text:"string | undefined"},attribute:"src"},{kind:"field",name:"size",type:{text:"number | undefined"},description:"Scale of the avatar",attribute:"size"},{kind:"method",name:"updateSize",privacy:"private",description:"Updates the size by setting the width and height"},{kind:"method",name:"photoTemplate"}],attributes:[{name:"type",type:{text:"AvatarType | undefined"},fieldName:"type"},{name:"alt",type:{text:"string | undefined"},fieldName:"alt"},{name:"src",type:{text:"string | undefined"},fieldName:"src"},{name:"size",type:{text:"number | undefined"},description:"Scale of the avatar",fieldName:"size"}],superclass:{name:"Component",module:"/src/models"},tagName:"mdc-avatar",summary:"This is MyElement",jsDoc:`/**
+import{s as d}from"./chunk-L4EGOTBX-ars-O5a7.js";import"./entry-preview-BTbO7y0k.js";import{k as r}from"./lit-element-CPYlYYac.js";import"./index-BfB9Gei2.js";import"./index-xE1mO55Y.js";import"./index-DrFu-skq.js";import"./index-BLShQaRP.js";import"./state-I_twzcUk.js";import"./create-context-89xeped_.js";import"./iconprovider.component-DlI5gUhJ.js";const l="1.0.0",m="",c=[{kind:"javascript-module",path:"components/avatar/avatar.component.js",declarations:[{kind:"class",description:"",name:"Avatar",slots:[{description:"This is a default/unnamed slot",name:""}],members:[{kind:"field",name:"type",type:{text:"AvatarType | undefined"},attribute:"type",reflects:!0},{kind:"field",name:"alt",type:{text:"string | undefined"},attribute:"alt"},{kind:"field",name:"src",type:{text:"string | undefined"},attribute:"src"},{kind:"field",name:"size",type:{text:"number | undefined"},description:"Scale of the avatar",attribute:"size"},{kind:"method",name:"updateSize",privacy:"private",description:"Updates the size by setting the width and height"},{kind:"method",name:"photoTemplate"}],attributes:[{name:"type",type:{text:"AvatarType | undefined"},fieldName:"type"},{name:"alt",type:{text:"string | undefined"},fieldName:"alt"},{name:"src",type:{text:"string | undefined"},fieldName:"src"},{name:"size",type:{text:"number | undefined"},description:"Scale of the avatar",fieldName:"size"}],superclass:{name:"Component",module:"/src/models"},tagName:"mdc-avatar",summary:"This is MyElement",jsDoc:`/**
  * @slot - This is a default/unnamed slot
  *
  * @summary This is MyElement
@@ -95,7 +95,86 @@ If not set, it falls back to the size defined by the length unit.`,fieldName:"si
  * @tagname mdc-iconprovider
  *
  * @slot default - children
- */`,customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"IconProvider",module:"components/iconprovider/iconprovider.component.js"}}]},{kind:"javascript-module",path:"components/text/text.component.js",declarations:[{kind:"class",description:'Text component, which helps creating a text element aligning with\nstyling.\n\nThe `type` attribute allows changing the type of text, like `heading-1`, etc.\n\nFor accessibility the `role` and `aria-level` on the component are going to be set\nautomatically based on the type e.g. heading-1 will lead to `role="heading"` and `aria-level=1`.',name:"Text",members:[{kind:"field",name:"type",type:{text:"FontType | undefined"},privacy:"public",description:"Text Type - defines how the text should be rendered\n\nPossible values: `heading-1` | `heading-2` | `heading-3` | `heading-4`\n| `heading-5` | `heading-6` | `heading-7` | `body-large` | `body-regular`\n| `body-small` | `image-title` | `label`;",attribute:"type",reflects:!0},{kind:"method",name:"handleTypeChanged",privacy:"protected",return:{type:{text:"void"}}}],attributes:[{name:"type",type:{text:"FontType | undefined"},description:"Text Type - defines how the text should be rendered\n\nPossible values: `heading-1` | `heading-2` | `heading-3` | `heading-4`\n| `heading-5` | `heading-6` | `heading-7` | `body-large` | `body-regular`\n| `body-small` | `image-title` | `label`;",fieldName:"type"}],superclass:{name:"Component",module:"/src/models"},tagName:"mdc-text",jsDoc:'/**\n * Text component, which helps creating a text element aligning with\n * styling.\n *\n * The `type` attribute allows changing the type of text, like `heading-1`, etc.\n *\n * For accessibility the `role` and `aria-level` on the component are going to be set\n * automatically based on the type e.g. heading-1 will lead to `role="heading"` and `aria-level=1`.\n *\n * @tagname mdc-text\n */',customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"Text",module:"components/text/text.component.js"}}]},{kind:"javascript-module",path:"components/themeprovider/themeprovider.component.js",declarations:[{kind:"class",description:`ThemeProvider component, which sets the passed in themeclass as class.
+ */`,customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"IconProvider",module:"components/iconprovider/iconprovider.component.js"}}]},{kind:"javascript-module",path:"components/text/text.component.js",declarations:[{kind:"class",description:"Text component for creating styled text elements.\nIt has to be mounted within the ThemeProvider to access color and font tokens.\n\nThe `type` attribute allows changing the text style.\nThe `tagname` attribute allows changing the tag name of the text element.\nThe default tag name is `p`.\n\nThe `tagname` attribute should be a valid HTML tag name.\nIf the `tagname` attribute is not a valid HTML tag name, the default tag name will be used.\n\nThe styling is applied based on the `type` attribute.",name:"Text",slots:[{description:"Default slot for text content",name:""}],members:[{kind:"field",name:"type",type:{text:"FontType"},privacy:"public",description:`Specifies the text style to be applied.
+
+Acceptable values include:
+
+- 'body-small-regular'
+- 'body-small-medium'
+- 'body-small-bold'
+- 'body-midsize-regular'
+- 'body-midsize-medium'
+- 'body-midsize-bold'
+- 'body-large-regular'
+- 'body-large-medium'
+- 'body-large-bold'
+- 'body-small-regular-underline'
+- 'body-small-medium-underline'
+- 'body-midsize-regular-underline'
+- 'body-midsize-medium-underline'
+- 'body-large-regular-underline'
+- 'body-large-medium-underline'
+- 'heading-small-regular'
+- 'heading-small-medium'
+- 'heading-small-bold'
+- 'heading-midsize-regular'
+- 'heading-midsize-medium'
+- 'heading-midsize-bold'
+- 'heading-large-regular'
+- 'heading-large-medium'
+- 'heading-large-bold'
+- 'heading-xlarge-regular'
+- 'heading-xlarge-medium'
+- 'heading-xlarge-bold'
+- 'headline-small-light'
+- 'headline-small-regular'`,attribute:"type",reflects:!0},{kind:"field",name:"tagname",type:{text:"ValidTextTags | undefined"},privacy:"public",description:"Specifies the HTML tag name for the text element. The default tag name is `p`.\nThis attribute is optional. When set, it changes the tag name of the text element.\n\nAcceptable values include: 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'small', 'span', 'div', 'section'.\n\nFor instance, setting this attribute to `h2` will render the text element as an `h2` element.\nNote that the styling is determined by the `type` attribute.",attribute:"tagname",reflects:!0}],attributes:[{name:"type",type:{text:"FontType"},description:`Specifies the text style to be applied.
+
+Acceptable values include:
+
+- 'body-small-regular'
+- 'body-small-medium'
+- 'body-small-bold'
+- 'body-midsize-regular'
+- 'body-midsize-medium'
+- 'body-midsize-bold'
+- 'body-large-regular'
+- 'body-large-medium'
+- 'body-large-bold'
+- 'body-small-regular-underline'
+- 'body-small-medium-underline'
+- 'body-midsize-regular-underline'
+- 'body-midsize-medium-underline'
+- 'body-large-regular-underline'
+- 'body-large-medium-underline'
+- 'heading-small-regular'
+- 'heading-small-medium'
+- 'heading-small-bold'
+- 'heading-midsize-regular'
+- 'heading-midsize-medium'
+- 'heading-midsize-bold'
+- 'heading-large-regular'
+- 'heading-large-medium'
+- 'heading-large-bold'
+- 'heading-xlarge-regular'
+- 'heading-xlarge-medium'
+- 'heading-xlarge-bold'
+- 'headline-small-light'
+- 'headline-small-regular'`,fieldName:"type"},{name:"tagname",type:{text:"ValidTextTags | undefined"},description:"Specifies the HTML tag name for the text element. The default tag name is `p`.\nThis attribute is optional. When set, it changes the tag name of the text element.\n\nAcceptable values include: 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'small', 'span', 'div', 'section'.\n\nFor instance, setting this attribute to `h2` will render the text element as an `h2` element.\nNote that the styling is determined by the `type` attribute.",fieldName:"tagname"}],superclass:{name:"Component",module:"/src/models"},tagName:"mdc-text",jsDoc:`/**
+ * Text component for creating styled text elements.
+ * It has to be mounted within the ThemeProvider to access color and font tokens.
+ *
+ * The \`type\` attribute allows changing the text style.
+ * The \`tagname\` attribute allows changing the tag name of the text element.
+ * The default tag name is \`p\`.
+ *
+ * The \`tagname\` attribute should be a valid HTML tag name.
+ * If the \`tagname\` attribute is not a valid HTML tag name, the default tag name will be used.
+ *
+ * The styling is applied based on the \`type\` attribute.
+ *
+ * @tagname mdc-text
+ * @slot - Default slot for text content
+ */`,customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"Text",module:"components/text/text.component.js"}}]},{kind:"javascript-module",path:"components/themeprovider/themeprovider.component.js",declarations:[{kind:"class",description:`ThemeProvider component, which sets the passed in themeclass as class.
 If the themeclass switches, the existing themeclass will be removed as a class
 and the new themeclass will be added.
 
@@ -143,7 +222,7 @@ Default: 'mds-theme-stable-darkWebex'`,fieldName:"themeclass"}],superclass:{name
  * @cssproperty --mdc-themeprovider-font-weight - Option to override the font weight, default: \`400\`
  * @cssproperty --mdc-themeprovider-letter-spacing-adjustment - Option to override the default letter-spacing,
  * default: \`-0.25px\` (this is to match the old CiscoSans)
- */`,customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"ThemeProvider",module:"components/themeprovider/themeprovider.component.js"}}]}],h={schemaVersion:l,readme:c,modules:m},s=[{themeclass:"mds-theme-stable-darkWebex",displayName:"darkWebex",backgroundColor:"#000000",className:"dark"},{themeclass:"mds-theme-stable-lightWebex",displayName:"lightWebex",backgroundColor:"#ffffff",className:"light"}],p=e=>{for(const t of s)e.classList.remove(t.className)},u=(e,t)=>{e.classList.add(t)},f=e=>{const t=document.querySelectorAll("div.docs-story");for(const i of t)i.style.backgroundColor=e},b=(e,t)=>{const i=t.globals.theme,n=s.find(o=>o.displayName===i),a=document.querySelector("body.sb-show-main");return p(a),u(a,n.className),f(n.backgroundColor),r`<mdc-themeprovider
+ */`,customElement:!0}],exports:[{kind:"js",name:"default",declaration:{name:"ThemeProvider",module:"components/themeprovider/themeprovider.component.js"}}]}],h={schemaVersion:l,readme:m,modules:c},s=[{themeclass:"mds-theme-stable-darkWebex",displayName:"darkWebex",backgroundColor:"#000000",className:"dark"},{themeclass:"mds-theme-stable-lightWebex",displayName:"lightWebex",backgroundColor:"#ffffff",className:"light"}],u=e=>{for(const t of s)e.classList.remove(t.className)},p=(e,t)=>{e.classList.add(t)},f=e=>{const t=document.querySelectorAll("div.docs-story");for(const i of t)i.style.backgroundColor=e},b=(e,t)=>{const i=t.globals.theme,n=s.find(o=>o.displayName===i),a=document.querySelector("body.sb-show-main");return u(a),p(a,n.className),f(n.backgroundColor),r`<mdc-themeprovider
     id="theme-provider"
     themeclass="${n.themeclass}"
   >
@@ -152,4 +231,4 @@ Default: 'mds-theme-stable-darkWebex'`,fieldName:"themeclass"}],superclass:{name
         url="./icons/svg"
       >
         ${e()}
-      </mdc-iconprovider>`;function y(e){const t=i=>i.replace(/-([a-z])/g,n=>n[1].toUpperCase());return e.modules.forEach(i=>{i.declarations.forEach(n=>{const a=new Set(n.attributes.map(o=>t(o.name)));n.members=n.members.filter(o=>!a.has(o.name))})}),e}const v=y(h);d(v);const j={parameters:{a11y:{options:{runOnly:{type:"tag",values:["best-practice","wcag2a","wcag2aa","wcag21aa","wcag22aa"]}}},actions:{argTypesRegex:"^on[A-Z].*"},backgrounds:{disable:!0,grid:{disable:!0}},badgesConfig:{wip:{styles:{backgroundColor:"#30240D",borderColor:"#D6B220",color:"#FFFFFFF2"},title:"Work In Progress",tooltip:{title:"This Component is Work In Progress",desc:"Keep an eye on the Release history for updates or provide feedback.",links:[{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}},stable:{styles:{backgroundColor:"#416116",borderColor:"#93C437",color:"#FFFFFFF2"},title:"Stable",tooltip:{title:"This Component is Stable",desc:"Ready for use.",links:[{title:"Consumption guide",href:"https://momentum-design.github.io/momentum-design/en/components/"},{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}},deprecated:{styles:{backgroundColor:"#4F0E10",borderColor:"#FC8B98",color:"#FFFFFFF2"},title:"Deprecated",tooltip:{title:"This Component is Deprecated",desc:"Check the Release history for more information about deprecation or provide feedback.",links:[{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}}},controls:{disableSaveFromUI:!0,expanded:!0,matchers:{color:/(background|color)$/i,date:/Date$/}},options:{storySort:{order:["Consumption","Components","Work In Progress"]}}},decorators:[b,g],globalTypes:{theme:{description:"Global theme for components",defaultValue:s[0].displayName,toolbar:{title:"Theme",icon:"globe",items:s.map(e=>e.displayName),dynamicTitle:!0}}}};export{j as default};
+      </mdc-iconprovider>`;function y(e){const t=i=>i.replace(/-([a-z])/g,n=>n[1].toUpperCase());return e.modules.forEach(i=>{i.declarations.forEach(n=>{const a=new Set(n.attributes.map(o=>t(o.name)));n.members=n.members.filter(o=>!a.has(o.name))})}),e}const v=y(h);d(v);const L={parameters:{a11y:{options:{runOnly:{type:"tag",values:["best-practice","wcag2a","wcag2aa","wcag21aa","wcag22aa"]}}},actions:{argTypesRegex:"^on[A-Z].*"},backgrounds:{disable:!0,grid:{disable:!0}},badgesConfig:{wip:{styles:{backgroundColor:"#30240D",borderColor:"#D6B220",color:"#FFFFFFF2"},title:"Work In Progress",tooltip:{title:"This Component is Work In Progress",desc:"Keep an eye on the Release history for updates or provide feedback.",links:[{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}},stable:{styles:{backgroundColor:"#416116",borderColor:"#93C437",color:"#FFFFFFF2"},title:"Stable",tooltip:{title:"This Component is Stable",desc:"Ready for use.",links:[{title:"Consumption guide",href:"https://momentum-design.github.io/momentum-design/en/components/"},{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}},deprecated:{styles:{backgroundColor:"#4F0E10",borderColor:"#FC8B98",color:"#FFFFFFF2"},title:"Deprecated",tooltip:{title:"This Component is Deprecated",desc:"Check the Release history for more information about deprecation or provide feedback.",links:[{title:"Release history",href:"https://github.com/momentum-design/momentum-design/releases"},{title:"Leave feedback",href:"https://github.com/momentum-design/momentum-design/issues"}]}}},controls:{disableSaveFromUI:!0,expanded:!0,matchers:{color:/(background|color)$/i,date:/Date$/}},options:{storySort:{order:["Consumption","Components","Work In Progress"]}}},decorators:[b,g],globalTypes:{theme:{description:"Global theme for components",defaultValue:s[0].displayName,toolbar:{title:"Theme",icon:"globe",items:s.map(e=>e.displayName),dynamicTitle:!0}}}};export{L as default};
