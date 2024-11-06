@@ -40,7 +40,18 @@ class Presence extends Component {
   type = DEFAULTS.TYPE;
 
   /**
-   * Size of the presence icon
+   * Size of the presence icon in rem
+   * 
+   * Acceptable values include:
+   * 
+   * - XX_SMALL: 0.875,
+   * - X_SMALL: 0.875,
+   * - SMALL: 0.875,
+   * - MIDSIZE: 1.15,
+   * - LARGE: 1.3,
+   * - X_LARGE: 1.6,
+   * - XX_LARGE: 2.25,
+   * 
    */
   @property({ type: String, reflect: true })
   size = DEFAULTS.SIZE;
