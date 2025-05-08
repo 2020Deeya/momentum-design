@@ -4,7 +4,6 @@ import { expect } from '@playwright/test';
 import { ComponentsPage, test } from '../../../config/playwright/setup';
 import StickerSheet from '../../../config/playwright/setup/utils/Stickersheet';
 import type { SideNavigationVariant } from './sidenavigation.types';
-import { DEFAULTS } from './sidenavigation.constants';
 
 type SetupOptions = {
   componentsPage: ComponentsPage;
@@ -14,75 +13,75 @@ type SetupOptions = {
   ariaLabel?: string;
 };
 
-const renderChildren = (isExpanded: boolean = true) =>
+const renderChildren = (isExpanded: boolean) =>
   ` <!-- Upper Nav (scrollable section) -->
     <mdc-navitemlist role="menubar" slot="scrollable-section" aria-label='navItemList label' ?isExpanded=${isExpanded}>
-      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" nav-id="1" 
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="1" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Messaging
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="2"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold"
+      nav-id="2" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Meetings
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="dot" icon-name="placeholder-bold" nav-id="3" aria-label='navItem label' 
+      <mdc-navitem role="menuitem" badge-type="dot" icon-name="placeholder-bold" nav-id="3" aria-label='navItem label' 
       disabled ?isExpanded=${isExpanded}>Calling</mdc-navitem>
       <mdc-divider variant="gradient"></mdc-divider>
       <mdc-text>Section 1</mdc-text>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" nav-id="4"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold"
+      nav-id="4" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Messaging
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="5"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="5" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Meetings
       </mdc-navitem>
-      <mdc-navitem role="menuitem"icon-name="placeholder-bold" aria-label='navItem label' 
+      <mdc-navitem role="menuitem" icon-name="placeholder-bold" aria-label='navItem label' 
       ?isExpanded=${isExpanded}>Calling</mdc-navitem>
       <mdc-divider variant="gradient" nav-id="6"></mdc-divider>
       <mdc-text>Section 2</mdc-text>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" nav-id="7"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="7" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Messaging
       </mdc-navitem>
-      <mdc-navitem role="menuitem"icon-name="placeholder-bold" nav-id="8"
+      <mdc-navitem role="menuitem" icon-name="placeholder-bold" nav-id="8"
       aria-label='navItem label' ?isExpanded=${isExpanded}>
         Meetings
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="dot" icon-name="placeholder-bold" nav-id="9" 
+      <mdc-navitem role="menuitem" badge-type="dot" icon-name="placeholder-bold" nav-id="9" 
       aria-label='navItem label' ?isExpanded=${isExpanded}>Calling</mdc-navitem>
       <mdc-divider variant="gradient"></mdc-divider>
       <mdc-text>Section 3</mdc-text>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" nav-id="10"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="10" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Messaging
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="11"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="11" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Meetings
       </mdc-navitem>
       <mdc-navitem role="menuitem"badge-type="dot" icon-name="placeholder-bold" nav-id="12" 
       aria-label='navItem label' ?isExpanded=${isExpanded}>Calling</mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" nav-id="13"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="2" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="13" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Messaging
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="14"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="14" aria-label='navItem label' ?isExpanded=${isExpanded}>
         Meetings
       </mdc-navitem>
-      <mdc-navitem role="menuitem"icon-name="placeholder-bold" nav-id="15" aria-label='navItem label'>Calling</mdc-navitem>
-      <mdc-divider variant="gradient" ?isExpanded=${isExpanded}></mdc-divider>
+      <mdc-navitem role="menuitem" icon-name="placeholder-bold" nav-id="15" 
+      aria-label='navItem label'>Calling</mdc-navitem>
     </mdc-navitemlist>
 
     <!-- Lower Nav (Fixed section) -->
     <mdc-navitemlist role="menubar" slot="fixed-section" aria-label='navItemList label'>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="1"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="1" aria-label='navItem label' ?isExpanded=${isExpanded}>
           Meetings
       </mdc-navitem>
-      <mdc-navitem role="menuitem"badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" nav-id="2"
-      aria-label='navItem label' ?isExpanded=${isExpanded}>
+      <mdc-navitem role="menuitem" badge-type="counter" counter="3" max-counter="66" icon-name="placeholder-bold" 
+      nav-id="2" aria-label='navItem label' ?isExpanded=${isExpanded}>
           Meetings
       </mdc-navitem>
     </mdc-navitemlist>
@@ -99,16 +98,14 @@ const setup = async (args: SetupOptions) => {
   const { componentsPage, ...restArgs } = args;
 
   const html = `
-  <div style="height: 60rem; margin: 1rem">
       <mdc-sidenavigation
         ${restArgs.ariaLabel ? `aria-label="${restArgs.ariaLabel}"` : ''}
-        ${restArgs.variant ? `variant="${restArgs.variant}"` : DEFAULTS.VARIANT}>
-        ${restArgs.customerName ? `icon-name="${restArgs.customerName}"` : ''}
+        ${restArgs.variant ? `variant="${restArgs.variant}"` : ''}>
+        ${restArgs.customerName ? `customer-name="${restArgs.customerName}"` : ''}
         ${restArgs.isExpanded ? `isexpanded="${restArgs.isExpanded}"` : ''}
       >
-        ${renderChildren(true)}
+        ${renderChildren(restArgs.isExpanded)}
       </mdc-sidenavigation>
-  </div>
   `;
 
   await componentsPage.mount({ html, clearDocument: true });
@@ -128,10 +125,10 @@ test('mdc-sidenavigation', async ({ componentsPage }) => {
    * navItems - The role=menuitem element within the mdc-sidenavigation component.
    * toggleButton - The mdc-button element within the mdc-sidenavigation component.
    */
-  // const sideNavigation = await setup({ componentsPage });
+  const sideNavigation = await setup({ componentsPage });
   // const navItemLists = sideNavigation.getByRole('menubar');
   // const navItems = sideNavigation.getByRole('menuitem');
-  // const toggleButton = sideNavigation.locator('mdc-button');
+  const toggleButton = sideNavigation.locator('mdc-button');
 
   /**
    * ATTRIBUTES
@@ -167,66 +164,72 @@ test('mdc-sidenavigation', async ({ componentsPage }) => {
    * VISUAL REGRESSION
    */
   await test.step('visual-regression', async () => {
+    const stickerSheet = new StickerSheet(componentsPage, 'mdc-sidenavigation');
+    stickerSheet.setAttributes({ variant: 'flexible', 'customer-name': '%Customer Name%' });
+
     await test.step('mdc-sidenavigation with flexible variant and is expanded', async () => {
-      const stickerSheet = new StickerSheet(componentsPage, 'mdc-sidenavigation');
       // default variant (Flexible and expanded)
-      stickerSheet.setAttributes({ variant: 'flexible', 'consumer-name': '%Customer Name%' });
-      stickerSheet.setChildren(renderChildren(true)); // not needed
+      stickerSheet.setChildren(renderChildren(true));
       await stickerSheet.createMarkupWithCombination({});
 
-      await stickerSheet.mountStickerSheet();
+      await stickerSheet.mountStickerSheet({ wrapperStyle: 'height: 90%;' });
       const container = stickerSheet.getWrapperContainer();
 
       await test.step('matches screenshot of the element', async () => {
-        await componentsPage.visualRegression.takeScreenshot('mdc-sidenavigation-flexible-expanded', { element: container });
+        await componentsPage.visualRegression.takeScreenshot(
+          'mdc-sidenavigation-flexible-expanded',
+          { element: container },
+        );
       });
     });
 
     await test.step('mdc-sidenavigation with flexible variant and is collapsed', async () => {
-      const stickerSheet = new StickerSheet(componentsPage, 'mdc-sidenavigation');
-
       // Flexible and not expanded
-      stickerSheet.setAttributes({ variant: 'flexible', 'consumer-name': '%Customer Name%' });
       stickerSheet.setChildren(renderChildren(false));
       await stickerSheet.createMarkupWithCombination({});
 
-      await stickerSheet.mountStickerSheet();
+      await stickerSheet.mountStickerSheet({ wrapperStyle: 'height: 90%;' });
       const container = stickerSheet.getWrapperContainer();
 
       await test.step('matches screenshot of the element', async () => {
-        await componentsPage.visualRegression.takeScreenshot('mdc-sidenavigation-flexible-collapsed', { element: container });
+        await toggleButton.click();
+        await componentsPage.visualRegression.takeScreenshot(
+          'mdc-sidenavigation-flexible-collapsed',
+          { element: container },
+        );
       });
     });
 
     await test.step('mdc-sidenavigation with fixed-expanded variant', async () => {
-      const stickerSheet = new StickerSheet(componentsPage, 'mdc-sidenavigation');
-
       // fixed-expanded
-      stickerSheet.setAttributes({ variant: 'fixed-expanded', 'consumer-name': '%Customer Name%' });
+      stickerSheet.setAttributes({ variant: 'fixed-expanded', 'customer-name': '%Customer Name%' });
       stickerSheet.setChildren(renderChildren(true));
       await stickerSheet.createMarkupWithCombination({});
 
-      await stickerSheet.mountStickerSheet();
+      await stickerSheet.mountStickerSheet({ wrapperStyle: 'height: 90%;' });
       const container = stickerSheet.getWrapperContainer();
-
       await test.step('matches screenshot of the element', async () => {
-        await componentsPage.visualRegression.takeScreenshot('mdc-sidenavigation-fixed-expanded', { element: container });
+        await componentsPage.visualRegression.takeScreenshot(
+          'mdc-sidenavigation-fixed-expanded',
+          { element: container },
+        );
       });
     });
 
     await test.step('mdc-sidenavigation with fixed-collapsed variant', async () => {
-      const stickerSheet = new StickerSheet(componentsPage, 'mdc-sidenavigation-fixed-expanded');
-
       // fixed-collapsed
-      stickerSheet.setAttributes({ variant: 'fixed-collapsed', 'consumer-name': '%Customer Name%' });
+      stickerSheet.setAttributes({ variant: 'fixed-collapsed', 'customer-name': '%Customer Name%' });
       stickerSheet.setChildren(renderChildren(false));
       await stickerSheet.createMarkupWithCombination({});
 
-      await stickerSheet.mountStickerSheet();
+      await stickerSheet.mountStickerSheet({ wrapperStyle: 'height: 90%;' });
       const container = stickerSheet.getWrapperContainer();
 
       await test.step('matches screenshot of the element', async () => {
-        await componentsPage.visualRegression.takeScreenshot('mdc-sidenavigation-fixed-collapsed', { element: container });
+        await componentsPage.visualRegression.takeScreenshot(
+          'mdc-sidenavigation-fixed-collapsed',
+          { element: container },
+        );
       });
     });
   });
