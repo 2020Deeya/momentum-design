@@ -9,14 +9,14 @@ import providerUtils from '../../utils/provider';
 import type { IconNames } from '../icon/icon.types';
 import { TYPE, VALID_TEXT_TAGS } from '../text/text.constants';
 import { IconNameMixin } from '../../utils/mixins/IconNameMixin';
-import ListItem from '../listitem/listitem.component';
+import MenuItem from '../menuitem/menuitem.component';
 import { getIconNameWithoutStyle } from '../button/button.utils';
 import SideNavigation from '../sidenavigation/sidenavigation.component';
 import type { BadgeType } from './navitem.types';
 import type { ListItemVariants } from '../listitem/listitem.types';
 
 /**
- * `mdc-navitem` is a button element styled to work as a navigation tab.
+ * `mdc-navitem` is a menuitem styled to work as a navigation tab.
  * It supports a leading icon, optional badge and dynamic text rendering.
  *
  * Note: mdc-navitem is intended to be used inside `mdc-navitemlist` as a part of the sidenavigation component.
@@ -46,7 +46,7 @@ import type { ListItemVariants } from '../listitem/listitem.types';
  * @cssproperty --mdc-navitem-active-background-color - Background color of the navigation item when active.
  * @cssproperty --mdc-navitem-expanded-width - Width of the navItem when expanded.
  */
-class NavItem extends IconNameMixin(ListItem) {
+class NavItem extends IconNameMixin(MenuItem) {
   /**
    * The navitem's active state indicates whether it is currently toggled on (active) or off (inactive).
    * When the active state is true, the navitem is considered to be in an active state, meaning it is toggled on.
@@ -104,7 +104,6 @@ class NavItem extends IconNameMixin(ListItem) {
 
   override connectedCallback(): void {
     super.connectedCallback();
-    this.role = DEFAULTS.ROLE;
     this.variant = undefined as unknown as ListItemVariants;
     this.addEventListener('click', this.executeAction);
     this.addEventListener('keydown', this.executeAction);
@@ -138,7 +137,7 @@ class NavItem extends IconNameMixin(ListItem) {
    * @param active - The active state.
    */
 
-  private modifyIconName(active: boolean): void {
+  private modifyIconName(active: boolean | undefined): void {
     if (!this.iconName) return;
 
     const isFilled = this.iconName.endsWith('-filled');
@@ -174,7 +173,7 @@ class NavItem extends IconNameMixin(ListItem) {
    *
    * @param active - The active state of the navItem.
    */
-  private setActive(active: boolean) {
+  private setActive(active: boolean | undefined) {
     if (active) {
       this.setAttribute('aria-current', 'page');
     } else {
@@ -184,9 +183,8 @@ class NavItem extends IconNameMixin(ListItem) {
   }
 
   protected executeAction(e: MouseEvent | KeyboardEvent):void {
+    if (this.disabled) return;
     if (e.type === 'click' || (e instanceof KeyboardEvent && (e.key === 'Enter' || e.key === ' '))) {
-      if (this.disabled) return;
-
       this.emitNavItemActiveChange(this.active as boolean);
     }
   }
@@ -194,7 +192,7 @@ class NavItem extends IconNameMixin(ListItem) {
   public override update(changedProperties: PropertyValues) {
     super.update(changedProperties);
     if (changedProperties.has('active')) {
-      this.setActive(this.active ?? false);
+      this.setActive(this.active);
     }
   }
 
@@ -209,7 +207,7 @@ class NavItem extends IconNameMixin(ListItem) {
     `;
   }
 
-  renderBadge(isExpanded: boolean) {
+  renderBadge(isExpanded: boolean | undefined) {
     const badgeClass = isExpanded ? '' : 'badge';
     const isValidBadgeType = Object.values(ALLOWED_BADGE_TYPES).includes(this.badgeType as BadgeType);
     if (!isValidBadgeType) {
@@ -235,9 +233,9 @@ class NavItem extends IconNameMixin(ListItem) {
           length-unit="rem"
           part="icon"
         ></mdc-icon>
-        ${!this.isExpanded ? this.renderBadge(this.isExpanded as boolean) : nothing}
+        ${!this.isExpanded ? this.renderBadge(this.isExpanded) : nothing}
       </div>
-      ${this.isExpanded ? html`${this.renderTextLabel()}${this.renderBadge(this.isExpanded as boolean)}` : nothing}
+      ${this.isExpanded ? html`${this.renderTextLabel()}${this.renderBadge(this.isExpanded)}` : nothing}
     `;
   }
 
