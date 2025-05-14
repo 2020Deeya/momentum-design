@@ -118,16 +118,7 @@ const setup = async (args: SetupOptions) => {
 test.use({ viewport: { width: 800, height: 1200 } });
 
 test('mdc-sidenavigation', async ({ componentsPage }) => {
-  /**
-   * ADDITIONAL LOCATORS
-   *
-   * navItemLists - The role=menubar element within the mdc-sidenavigation component.
-   * navItems - The role=menuitem element within the mdc-sidenavigation component.
-   * toggleButton - The mdc-button element within the mdc-sidenavigation component.
-   */
   const sideNavigation = await setup({ componentsPage });
-  // const navItemLists = sideNavigation.getByRole('menubar');
-  // const navItems = sideNavigation.getByRole('menuitem');
   const toggleButton = sideNavigation.locator('mdc-button');
 
   /**
@@ -240,4 +231,134 @@ test('mdc-sidenavigation', async ({ componentsPage }) => {
   await test.step('accessibility', async () => {
     await componentsPage.accessibility.checkForA11yViolations('sidenavigation-default');
   });
+
+  /**
+   * INTERACTION
+   */
+  await test.step('interaction', async () => {
+    const sideNavigation = await setup({ componentsPage });
+    const toggleButton = sideNavigation.locator('mdc-button');
+
+    const scrollableNavlist = sideNavigation.locator('[slot="scrollable-section"]');
+    const fixedNavlist = sideNavigation.locator('[slot="fixed-section"]');
+    const navItems = scrollableNavlist.locator('mdc-navitem');
+    const scrollableFirstNavItem = scrollableNavlist.locator('mdc-navitem').nth(0);
+    const scrollableLastNavItem = scrollableNavlist.locator('mdc-navitem').nth(-1);
+    const fixedFirstNavItem = fixedNavlist.locator('mdc-navitem').nth(0);
+    // const fixedLastNavItem = fixedNavlist.locator('mdc-navitem').nth(-1);
+
+    /**
+     * POINTER / MOUSE INTERACTIONS
+     */
+    await test.step('mouse: scrollable section with many items', async () => {
+      await scrollableNavlist.scrollIntoViewIfNeeded(); // Scroll to the last nav item
+      await componentsPage.page.mouse.wheel(0, 100); // simulate scroll
+      await expect(scrollableLastNavItem).toBeVisible();
+      await expect(fixedNavlist).toBeVisible();
+    });
+
+    await test.step('mouse: toggle expand/collapse state', async () => {
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+      await toggleButton.click();
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'false');
+      await toggleButton.click();
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    await test.step('mouse: clicking nav item should retain focus and activate it', async () => {
+      await scrollableFirstNavItem.click();
+      await expect(scrollableFirstNavItem).toHaveAttribute('aria-current', 'page');
+    });
+
+    await test.step('mouse: clicking a disabled nav item does not trigger interaction', async () => {
+      const disabledNavItem = navItems.nth(2); // Assuming it's the "Calling" disabled item
+      await expect(disabledNavItem).toHaveAttribute('disabled', '');
+      const isClickable = await disabledNavItem.isEnabled();
+      expect(isClickable).toBe(false);
+      await expect(disabledNavItem).not.toHaveAttribute('aria-current', 'page');
+    });
+
+    /**
+     * KEYBOARD INTERACTIONS
+     */
+    await test.step('keyboard: scrollable section with many items', async () => {
+      await scrollableNavlist.scrollIntoViewIfNeeded();
+      await componentsPage.page.keyboard.press('PageDown');
+      await expect(scrollableLastNavItem).toBeVisible();
+      await expect(fixedNavlist).toBeVisible();
+      await componentsPage.page.keyboard.press('PageUp');
+    });
+
+    await test.step('keyboard: Tab through toggle button and navItems', async () => {
+      await componentsPage.page.keyboard.press('Tab'); // Focus first nav item of the fixed section
+      await expect(fixedFirstNavItem).toBeFocused();
+      await componentsPage.page.keyboard.press('Tab'); // Focus toggle button
+      await expect(toggleButton).toBeFocused();
+    });
+
+    await test.step('keyboard: toggle expand/collapse state', async () => {
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+      // Collapse the sideNavigation with Enter
+      await componentsPage.page.keyboard.press('Enter');
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'false');
+      // Expand the sideNavigation with Space
+      await componentsPage.page.keyboard.press('Space');
+      await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    await test.step('keyboard: Shift+Tab through toggle button and navItems', async () => {
+      await componentsPage.page.keyboard.press('Shift+Tab'); // Focus first nav item of the fixed section
+      await expect(fixedFirstNavItem).toBeFocused();
+      await componentsPage.page.keyboard.press('Shift+Tab'); // Focus first nav item of the scrollable section
+      await expect(scrollableFirstNavItem).toBeFocused();
+    });
+
+    await test.step('keyboard: ArrowDown should move focus to next nav item skipping disabled one', async () => {
+      const first = navItems.nth(0);
+      const fourth = navItems.nth(3);
+      await first.focus();
+      await componentsPage.page.keyboard.press('ArrowDown');
+      await expect(fourth).toBeFocused();
+    });
+
+    await test.step('keyboard: ArrowUp from first should wrap to last', async () => {
+      const first = navItems.first();
+      const last = navItems.last();
+      await first.focus();
+      await componentsPage.page.keyboard.press('ArrowUp');
+      await expect(last).toBeFocused();
+    });
+
+    await test.step('keyboard: Enter or Space should activate nav item', async () => {
+      const first = navItems.first();
+      const second = navItems.last();
+
+      // Activate second item with Enter
+      await second.focus();
+      await componentsPage.page.keyboard.press('Enter');
+      await expect(second).toBeFocused();
+      await expect(second).toHaveAttribute('aria-current', 'page');
+      await expect(second).not.toHaveAttribute('aria-current', 'page');
+
+      // Activate first item with Space
+      await first.focus();
+      await componentsPage.page.keyboard.press('Space');
+      await expect(first).toBeFocused();
+      await expect(first).toHaveAttribute('aria-current', 'page');
+      await expect(second).not.toHaveAttribute('aria-current', 'page');
+    });
+
+    await test.step('keyboard: clicking a disabled nav item does not trigger interaction', async () => {
+      const disabledNavItem = navItems.nth(2); // Assuming it's the "Calling" disabled item
+      await expect(disabledNavItem).toHaveAttribute('disabled', '');
+      await disabledNavItem.focus();
+      await componentsPage.page.keyboard.press('Space'); // or Enter
+      // No expectation of navItem activation
+      await expect(disabledNavItem).not.toHaveAttribute('aria-current', 'page');
+    });
+  });
+
+  /**
+   * USER STORIES
+   */
 });
