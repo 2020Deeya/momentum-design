@@ -290,6 +290,7 @@ test.describe.parallel('mdc-sidenavigation', () => {
       // User scrolls to the first item in the scrollable navigation section
       await scrollableFirstNavItem.scrollIntoViewIfNeeded();
       await expect(scrollableFirstNavItem).toBeVisible();
+      //
       await expect(fixedNavlist).toBeVisible();
 
       // User clicks on the first nav item of scrollable section to activate it again
@@ -297,13 +298,31 @@ test.describe.parallel('mdc-sidenavigation', () => {
       await expect(scrollableFirstNavItem).toHaveAttribute('aria-current', 'page');
       await expect(scrollableLastNavItem).not.toHaveAttribute('aria-current', 'page');
 
-      // User clicks the toggle button to collapse the side navigation
+      //
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-toggle-click-expanded' },
+      );
       await toggleButton.click();
       await expect(sideNavigation).toHaveAttribute('aria-expanded', 'false');
+
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-toggle-click-collapsed' },
+      );
 
       // User clicks the toggle button again to expand the side navigation
       await toggleButton.click();
       await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+
+      //
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-toggle-click-expanded' },
+      );
 
       // Take snapshot of the final state
       await componentsPage.visualRegression.takeScreenshot(
