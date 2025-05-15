@@ -134,14 +134,13 @@ test.describe.parallel('mdc-sidenavigation', () => {
      * ATTRIBUTES
      */
     await test.step('attributes', async () => {
-      const sideNavigation = await setup({ componentsPage });
-
       await test.step('default attributes', async () => {
         await expect(sideNavigation).toHaveRole('navigation');
         await expect(sideNavigation).toHaveAttribute('variant', 'flexible');
         await expect(sideNavigation).toHaveAttribute('customer-name', '');
         await expect(sideNavigation).toHaveAttribute('isexpanded');
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+        await expect(navItems.locator('[aria-current]')).toHaveCount(0);
       });
 
       const attributeTests: [string, Record<string, string | ''>][] = [
@@ -167,7 +166,7 @@ test.describe.parallel('mdc-sidenavigation', () => {
       /**
        * POINTER / MOUSE INTERACTIONS
        */
-      await test.step('mouse: clicking on toggle button should expand/collapse state', async () => {
+      await test.step('mouse: clicking the toggle button should toggle the expanded/collapsed state', async () => {
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
         await toggleButton.click();
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'false');
@@ -175,45 +174,49 @@ test.describe.parallel('mdc-sidenavigation', () => {
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
       });
 
-      await test.step('mouse: clicking on nav item should retain focus and activate it', async () => {
+      await test.step('mouse: hovering over a nav item should not activate it', async () => {
+        await scrollableFirstNavItem.hover();
+        await expect(scrollableFirstNavItem).not.toHaveAttribute('aria-current', 'page');
+      });
+
+      await test.step('mouse: clicking an enabled nav item should activate it', async () => {
         await scrollableFirstNavItem.click();
         await expect(scrollableFirstNavItem).toHaveAttribute('aria-current', 'page');
       });
 
-      await test.step('mouse: clicking on disabled nav item should not trigger anything', async () => {
+      await test.step('mouse: clicking a disabled nav item should not trigger any action', async () => {
         const disabledNavItem = navItems.nth(2); // Assuming it's the "Calling" disabled item
-        await expect(disabledNavItem).toHaveAttribute('disabled', '');
-        const isClickable = await disabledNavItem.isEnabled();
-        expect(isClickable).toBe(false);
+        await expect(disabledNavItem).toBeDisabled();
+        await disabledNavItem.click({ force: true }); // Attempt to click it
         await expect(disabledNavItem).not.toHaveAttribute('aria-current', 'page');
       });
 
       /**
        * KEYBOARD INTERACTIONS
        */
-      await test.step('keyboard: toggle expand/collapse state on pressing space/enter', async () => {
+      await test.step('keyboard: pressing Space or Enter should toggle the expanded/collapsed state', async () => {
         await toggleButton.focus();
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
-        // Collapse the sideNavigation with Enter
+        // Collapse the sideNavigation using Enter
         await componentsPage.page.keyboard.press('Enter');
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'false');
-        // Expand the sideNavigation with Space
+        // Expand the sideNavigation using Space
         await componentsPage.page.keyboard.press('Space');
         await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
       });
 
-      await test.step('keyboard: activate nav item on pressing space/enter', async () => {
+      await test.step('keyboard: pressing Space or Enter on a nav item should activate it', async () => {
         const first = navItems.nth(0);
         const second = navItems.nth(1);
 
-        // Activate second item with Enter
+        // Activate second item using Enter
         await second.focus();
         await componentsPage.page.keyboard.press('Enter');
         await expect(second).toBeFocused();
         await expect(second).toHaveAttribute('aria-current', 'page');
         await expect(first).not.toHaveAttribute('aria-current', 'page');
 
-        // Activate first item with Space
+        // Activate first item using Space
         await first.focus();
         await componentsPage.page.keyboard.press('Space');
         await expect(first).toBeFocused();
@@ -221,12 +224,11 @@ test.describe.parallel('mdc-sidenavigation', () => {
         await expect(second).not.toHaveAttribute('aria-current', 'page');
       });
 
-      await test.step('keyboard: disabled nav item should not trigger anything on pressing keydown', async () => {
+      await test.step('keyboard: disabled nav item should remain inactive on keydown', async () => {
         const disabledNavItem = navItems.nth(2);
-        await expect(disabledNavItem).toHaveAttribute('disabled', '');
+        await expect(disabledNavItem).toBeDisabled();
         await disabledNavItem.focus();
         await componentsPage.page.keyboard.press('Space'); // or Enter
-        // No expectation of navItem activation
         await expect(disabledNavItem).not.toHaveAttribute('aria-current', 'page');
       });
     });
@@ -261,8 +263,15 @@ test.describe.parallel('mdc-sidenavigation', () => {
       await fixedFirstNavItem.click();
       await expect(fixedFirstNavItem).toHaveAttribute('aria-current', 'page');
 
+      // Take snapshot of the current state
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-user-flow' },
+      );
+
       // User scrolls to the last item in the scrollable navigation section
-      await componentsPage.page.keyboard.press('End');
+      await scrollableLastNavItem.scrollIntoViewIfNeeded();
       await expect(scrollableLastNavItem).toBeVisible();
       await expect(fixedNavlist).toBeVisible();
 
@@ -271,8 +280,15 @@ test.describe.parallel('mdc-sidenavigation', () => {
       await expect(scrollableLastNavItem).toHaveAttribute('aria-current', 'page');
       await expect(scrollableFirstNavItem).not.toHaveAttribute('aria-current', 'page');
 
+      // Take snapshot of the mid state
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-activate-last' },
+      );
+
       // User scrolls to the first item in the scrollable navigation section
-      await componentsPage.page.keyboard.press('Home');
+      await scrollableFirstNavItem.scrollIntoViewIfNeeded();
       await expect(scrollableFirstNavItem).toBeVisible();
       await expect(fixedNavlist).toBeVisible();
 
@@ -288,6 +304,13 @@ test.describe.parallel('mdc-sidenavigation', () => {
       // User clicks the toggle button again to expand the side navigation
       await toggleButton.click();
       await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+
+      // Take snapshot of the final state
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'mouse-user-flow' },
+      );
     });
 
     await test.step('keyboard user flow', async () => {
@@ -305,6 +328,13 @@ test.describe.parallel('mdc-sidenavigation', () => {
       await componentsPage.page.keyboard.press('Tab');
       await componentsPage.page.keyboard.press('Enter');
       await expect(fixedFirstNavItem).toHaveAttribute('aria-current', 'page');
+
+      // Take snapshot of the current state
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'keyboard-user-flow' },
+      );
 
       // User presses Shift+tab to focus first nav item of scrollable section
       await componentsPage.page.keyboard.press('Shift+Tab');
@@ -329,12 +359,26 @@ test.describe.parallel('mdc-sidenavigation', () => {
       await expect(scrollableLastNavItem).toHaveAttribute('aria-current', 'page');
       await expect(scrollableFirstNavItem).not.toHaveAttribute('aria-current', 'page');
 
+      // Take snapshot of the mid state
+      await componentsPage.page.keyboard.press('End'); // Use End key; Arrow keys don't scroll fully
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'keyboard-activate-last' },
+      );
+
       // User presses ArrowDown to the top and activate first nav item of the scrollable section again
       await componentsPage.page.keyboard.press('ArrowDown');
       await expect(scrollableFirstNavItem).toBeFocused();
       await componentsPage.page.keyboard.press('Enter');
       await expect(scrollableFirstNavItem).toHaveAttribute('aria-current', 'page');
       await expect(scrollableLastNavItem).not.toHaveAttribute('aria-current', 'page');
+
+      // User scrolls/navigates using Home and End to focus first and last nav item of the scrollable section
+      await componentsPage.page.keyboard.press('End');
+      await expect(scrollableLastNavItem).toBeFocused();
+      await componentsPage.page.keyboard.press('Home');
+      await expect(scrollableFirstNavItem).toBeFocused();
 
       // User presses tab twice to focus toggle button and collapse the sideNavigation state
       await componentsPage.page.keyboard.press('Tab');
@@ -345,6 +389,13 @@ test.describe.parallel('mdc-sidenavigation', () => {
       // User presses tab twice to focus toggle button and collapse the sideNavigation state
       await componentsPage.page.keyboard.press('Space'); // or Enter
       await expect(sideNavigation).toHaveAttribute('aria-expanded', 'true');
+
+      // Take snapshot of the current state
+      await componentsPage.visualRegression.takeScreenshot(
+        'mdc-sidenavigation',
+        { source: 'userflow',
+          fileNameSuffix: 'keyboard-user-flow' },
+      );
     });
   });
 
