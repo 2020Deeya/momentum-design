@@ -60,7 +60,7 @@ class ComponentsPage {
     // creates utility objects on components page and inject dependencies:
     this.accessibility = new Accessibility(this.page, this.testInfo);
     this.actionability = new Actionability(this.page);
-    this.visualRegression = new VisualRegression(this.page);
+    this.visualRegression = new VisualRegression(this.page, () => this.waitForPendingIcons());
     this.debugUtils = new DebugUtils(this.page);
   }
 

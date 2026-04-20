@@ -11,8 +11,11 @@ interface VisualRegression {
  * Contains common `visual-regression` utils, which are useful when doing visual-regression tests
  */
 class VisualRegression {
-  constructor(page: Page) {
+  private waitForPendingIcons: () => Promise<void>;
+
+  constructor(page: Page, waitForPendingIcons: () => Promise<void>) {
     this.page = page;
+    this.waitForPendingIcons = waitForPendingIcons;
   }
 
   /**
@@ -58,6 +61,8 @@ class VisualRegression {
    * - type of screenshot - stickersheet or userflow
    */
   async takeScreenshot(name: string, options?: ScreenShotOptions): Promise<void> {
+    await this.waitForPendingIcons();
+
     const elementToTakeScreenShotFrom = options?.element || this.page;
     const isSnapshotRun = process.env.E2E_SKIP_SNAPSHOT !== 'true';
     const screenshotSource = options?.source ?? 'stickersheet';
