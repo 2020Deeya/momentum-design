@@ -7,6 +7,7 @@ const BUTTON_VARIANTS = {
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
   TERTIARY: 'tertiary',
+  TEMP: 'temp',
 } as const;
 
 const PILL_BUTTON_SIZES = {
