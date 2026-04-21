@@ -8,7 +8,6 @@ const VARIANTS = {
   FLEXIBLE: 'flexible',
   FLEXIBLE_ON_HOVER: 'flexible-on-hover',
   HIDDEN: 'hidden',
-  TEMP: 'temp',
 };
 
 const DEFAULTS = {
