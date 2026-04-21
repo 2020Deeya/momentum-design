@@ -348,12 +348,12 @@ class ComponentsPage {
    * await componentsPage.waitForPendingIconRequests();
    * ```
    */
-  async waitForPendingIcons(options?: { timeout?: number }) {
+  async waitForPendingIcons(options?: { timeout?: number }): Promise<boolean> {
     const timeout = options?.timeout ?? 10_000;
 
-    await test.step('Waiting for pending icon requests to finish', async () => {
+    return test.step('Waiting for pending icon requests to finish', async () => {
       if (this.pendingIconRequests.size === 0) {
-        return;
+        return false;
       }
 
       await new Promise<void>((resolve, reject) => {
@@ -384,6 +384,8 @@ class ComponentsPage {
 
         this.pendingIconSettleCallbacks.add(onSettled);
       });
+
+      return true;
     });
   }
   // End AI-Assisted

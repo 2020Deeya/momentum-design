@@ -11,9 +11,9 @@ interface VisualRegression {
  * Contains common `visual-regression` utils, which are useful when doing visual-regression tests
  */
 class VisualRegression {
-  private waitForPendingIcons: () => Promise<void>;
+  private waitForPendingIcons: () => Promise<boolean>;
 
-  constructor(page: Page, waitForPendingIcons: () => Promise<void>) {
+  constructor(page: Page, waitForPendingIcons: () => Promise<boolean>) {
     this.page = page;
     this.waitForPendingIcons = waitForPendingIcons;
   }
@@ -61,20 +61,23 @@ class VisualRegression {
    * - type of screenshot - stickersheet or userflow
    */
   async takeScreenshot(name: string, options?: ScreenShotOptions): Promise<void> {
-    await this.waitForPendingIcons();
+    const hadPendingIcons = await this.waitForPendingIcons();
 
     // Wait for icons to render after network requests complete
     // Network completion triggers Lit state update, which schedules a re-render
     // We need to wait for the re-render and browser paint to complete
-    await this.page.evaluate(async () => {
-      await new Promise<void>(resolve => {
-        requestAnimationFrame(() => {
+    // Only wait if we actually had pending icons
+    if (hadPendingIcons) {
+      await this.page.evaluate(async () => {
+        await new Promise<void>(resolve => {
           requestAnimationFrame(() => {
-            resolve();
+            requestAnimationFrame(() => {
+              resolve();
+            });
           });
         });
       });
-    });
+    }
 
     const elementToTakeScreenShotFrom = options?.element || this.page;
     const isSnapshotRun = process.env.E2E_SKIP_SNAPSHOT !== 'true';
