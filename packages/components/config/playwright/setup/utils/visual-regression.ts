@@ -63,6 +63,19 @@ class VisualRegression {
   async takeScreenshot(name: string, options?: ScreenShotOptions): Promise<void> {
     await this.waitForPendingIcons();
 
+    // Wait for icons to render after network requests complete
+    // Network completion triggers Lit state update, which schedules a re-render
+    // We need to wait for the re-render and browser paint to complete
+    await this.page.evaluate(async () => {
+      await new Promise<void>(resolve => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            resolve();
+          });
+        });
+      });
+    });
+
     const elementToTakeScreenShotFrom = options?.element || this.page;
     const isSnapshotRun = process.env.E2E_SKIP_SNAPSHOT !== 'true';
     const screenshotSource = options?.source ?? 'stickersheet';
