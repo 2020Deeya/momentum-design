@@ -49,7 +49,6 @@ class VisualRegression {
     await this.page.emulateMedia({ forcedColors: enable ? 'active' : 'none' });
 
     // Wait for the browser to repaint after changing forced colors mode
-    // This ensures icons and other elements are rendered in high contrast before screenshot
     await this.page.evaluate(async () => {
       await new Promise<void>(resolve => {
         requestAnimationFrame(() => {
@@ -59,6 +58,9 @@ class VisualRegression {
         });
       });
     });
+
+    // Wait for any icon requests that may have been triggered by the mode change
+    await this.waitForPendingIcons();
   }
 
   /**

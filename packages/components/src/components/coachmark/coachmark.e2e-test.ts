@@ -14,6 +14,7 @@ const setup = async (args: SetupOptions) => {
   await componentsPage.mount({
     html: `
       <div id="wrapper" style="height: 50vh; width: 300px; display: inline-block">
+        <mdc-button id="focus-start">Focus Start</mdc-button>
         <mdc-text id="trigger">Anchor</mdc-text>
         <mdc-coachmark
           id="coachmark"
@@ -122,6 +123,7 @@ test('mdc-coachmark', async ({ componentsPage }) => {
 
         const closeButton = componentsPage.page.locator('[part="popover-close"]');
         await expect(closeButton).not.toBeFocused();
+        await componentsPage.actionability.pressTab();
         await componentsPage.actionability.pressTab();
         await expect(closeButton).toBeFocused();
         await componentsPage.page.keyboard.press('Enter');
