@@ -34,9 +34,8 @@ class VisualRegression {
   }
 
   /**
-   * Waits for all in-flight icon network requests to complete, then – only if
-   * there actually were pending requests – waits for the subsequent Lit
-   * re-render and browser paint via a double-rAF.
+   * Waits for all in-flight icon network requests to complete, then waits for
+   * the subsequent Lit re-render and browser paint via a double-rAF.
    */
   private async waitForIconsToRender(): Promise<void> {
     const hadPendingIcons = await this.waitForPendingIcons();
@@ -62,7 +61,6 @@ class VisualRegression {
    */
   private async toggleHighContrastMode(enable: boolean): Promise<void> {
     await this.page.emulateMedia({ forcedColors: enable ? 'active' : 'none' });
-    await this.waitForNextPaint();
   }
 
   /**
