@@ -103,6 +103,7 @@ class VisualRegression {
       for (const direction of ['ltr', 'rtl'] as const) {
         await this.setDocumentDirection(direction);
         await options?.assertionAfterSwitchingDirection?.(this.page);
+        await this.waitForPendingIcons();
         expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
           name: `${name}-${direction}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
         });
