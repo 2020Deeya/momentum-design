@@ -48,7 +48,10 @@ class VisualRegression {
   private async toggleHighContrastMode(enable: boolean): Promise<void> {
     await this.page.emulateMedia({ forcedColors: enable ? 'active' : 'none' });
 
-    // Wait for the browser to repaint after changing forced colors mode
+    // Wait for any icon requests that may have been triggered by the mode change
+    await this.waitForPendingIcons();
+
+    // Wait for the browser to repaint after icons are loaded
     await this.page.evaluate(async () => {
       await new Promise<void>(resolve => {
         requestAnimationFrame(() => {
@@ -58,9 +61,6 @@ class VisualRegression {
         });
       });
     });
-
-    // Wait for any icon requests that may have been triggered by the mode change
-    await this.waitForPendingIcons();
   }
 
   /**
@@ -103,7 +103,17 @@ class VisualRegression {
       for (const direction of ['ltr', 'rtl'] as const) {
         await this.setDocumentDirection(direction);
         await options?.assertionAfterSwitchingDirection?.(this.page);
+        // Wait for icons loaded by the callback, then wait for paint to complete
         await this.waitForPendingIcons();
+        await this.page.evaluate(async () => {
+          await new Promise<void>(resolve => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                resolve();
+              });
+            });
+          });
+        });
         expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
           name: `${name}-${direction}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
         });
