@@ -79,15 +79,18 @@ class VisualRegression {
     const screenshotSource = options?.source ?? 'stickersheet';
     const browserName = this.page.context()?.browser()?.browserType().name() ?? 'unknown';
 
+    // Wait for all icon requests to complete before taking any screenshots
+    // This prevents visual regression flakiness caused by icons loading asynchronously
+    if (isSnapshotRun) {
+      await this.waitForPendingIcons();
+    }
+
     if (isSnapshotRun && screenshotSource === 'userflow') {
       await this.setDocumentDirection('ltr');
       expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
         name: `${name}-userflow-${options?.fileNameSuffix}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
       });
     } else if (isSnapshotRun && screenshotSource === 'stickersheet') {
-      // Wait once upfront for all icon requests to complete before taking any screenshots
-      // This prevents visual regression flakiness caused by icons loading asynchronously
-      await this.waitForPendingIcons();
 
       // High contrast screenshot only for LTR and supported browsers
       if (['chromium', 'msedge'].includes(browserName)) {
