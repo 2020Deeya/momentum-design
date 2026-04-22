@@ -43,15 +43,14 @@ class VisualRegression {
 
   /**
    * Enables or disables high contrast mode by emulating the `forcedColors` setting in the browser.
+   * Includes a short delay to ensure the browser has time to apply the forced colors changes.
    * @param enable - Boolean flag to enable or disable high contrast mode.
    */
   private async toggleHighContrastMode(enable: boolean): Promise<void> {
     await this.page.emulateMedia({ forcedColors: enable ? 'active' : 'none' });
 
-    // Wait for any icon requests that may have been triggered by the mode change
-    await this.waitForPendingIcons();
-
-    // Wait for the browser to repaint after icons are loaded
+    // Wait for the browser to apply forced colors changes
+    // High contrast mode can trigger style recalculations that need time to settle
     await this.page.evaluate(async () => {
       await new Promise<void>(resolve => {
         requestAnimationFrame(() => {
@@ -75,8 +74,6 @@ class VisualRegression {
    * - type of screenshot - stickersheet or userflow
    */
   async takeScreenshot(name: string, options?: ScreenShotOptions): Promise<void> {
-    await this.waitForPendingIcons();
-
     const elementToTakeScreenShotFrom = options?.element || this.page;
     const isSnapshotRun = process.env.E2E_SKIP_SNAPSHOT !== 'true';
     const screenshotSource = options?.source ?? 'stickersheet';
@@ -88,6 +85,10 @@ class VisualRegression {
         name: `${name}-userflow-${options?.fileNameSuffix}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
       });
     } else if (isSnapshotRun && screenshotSource === 'stickersheet') {
+      // Wait once upfront for all icon requests to complete before taking any screenshots
+      // This prevents visual regression flakiness caused by icons loading asynchronously
+      await this.waitForPendingIcons();
+
       // High contrast screenshot only for LTR and supported browsers
       if (['chromium', 'msedge'].includes(browserName)) {
         await this.toggleHighContrastMode(true); // Enable high contrast
@@ -103,17 +104,6 @@ class VisualRegression {
       for (const direction of ['ltr', 'rtl'] as const) {
         await this.setDocumentDirection(direction);
         await options?.assertionAfterSwitchingDirection?.(this.page);
-        // Wait for icons loaded by the callback, then wait for paint to complete
-        await this.waitForPendingIcons();
-        await this.page.evaluate(async () => {
-          await new Promise<void>(resolve => {
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                resolve();
-              });
-            });
-          });
-        });
         expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
           name: `${name}-${direction}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
         });
