@@ -95,6 +95,8 @@ class VisualRegression {
       // High contrast screenshot only for LTR and supported browsers
       if (['chromium', 'msedge'].includes(browserName)) {
         await this.toggleHighContrastMode(true); // Enable high contrast
+        // Wait for any icon re-requests triggered by the forced-colors mode change
+        await this.waitForPendingIcons();
         expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
           name: `${name}-high-contrast.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
         });
@@ -107,6 +109,8 @@ class VisualRegression {
       for (const direction of ['ltr', 'rtl'] as const) {
         await this.setDocumentDirection(direction);
         await options?.assertionAfterSwitchingDirection?.(this.page);
+        // Wait for any icon re-requests triggered by direction change or component remount
+        await this.waitForPendingIcons();
         expect(await elementToTakeScreenShotFrom.screenshot(options)).toMatchSnapshot({
           name: `${name}-${direction}.${CONSTANTS.VISUAL_REGRESSION.FILE_EXTENSION}`,
         });
