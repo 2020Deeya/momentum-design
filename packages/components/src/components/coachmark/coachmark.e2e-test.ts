@@ -122,7 +122,7 @@ test('mdc-coachmark', async ({ componentsPage }) => {
 
         const closeButton = componentsPage.page.locator('[part="popover-close"]');
         await expect(closeButton).not.toBeFocused();
-        await componentsPage.page.keyboard.press('Tab');
+        await componentsPage.actionability.pressTab();
         await expect(closeButton).toBeFocused();
         await componentsPage.page.keyboard.press('Enter');
         await expect(componentsPage.page.locator('[part="popover-content"]')).not.toBeVisible();

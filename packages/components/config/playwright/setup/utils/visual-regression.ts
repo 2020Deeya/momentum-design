@@ -11,9 +11,9 @@ interface VisualRegression {
  * Contains common `visual-regression` utils, which are useful when doing visual-regression tests
  */
 class VisualRegression {
-  private waitForPendingIcons: () => Promise<boolean>;
+  private waitForPendingIcons: () => Promise<void>;
 
-  constructor(page: Page, waitForPendingIcons: () => Promise<boolean>) {
+  constructor(page: Page, waitForPendingIcons: () => Promise<void>) {
     this.page = page;
     this.waitForPendingIcons = waitForPendingIcons;
   }
@@ -47,6 +47,18 @@ class VisualRegression {
    */
   private async toggleHighContrastMode(enable: boolean): Promise<void> {
     await this.page.emulateMedia({ forcedColors: enable ? 'active' : 'none' });
+
+    // Wait for the browser to repaint after changing forced colors mode
+    // This ensures icons and other elements are rendered in high contrast before screenshot
+    await this.page.evaluate(async () => {
+      await new Promise<void>(resolve => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            resolve();
+          });
+        });
+      });
+    });
   }
 
   /**
@@ -61,23 +73,7 @@ class VisualRegression {
    * - type of screenshot - stickersheet or userflow
    */
   async takeScreenshot(name: string, options?: ScreenShotOptions): Promise<void> {
-    const hadPendingIcons = await this.waitForPendingIcons();
-
-    // Wait for icons to render after network requests complete
-    // Network completion triggers Lit state update, which schedules a re-render
-    // We need to wait for the re-render and browser paint to complete
-    // Only wait if we actually had pending icons
-    if (hadPendingIcons) {
-      await this.page.evaluate(async () => {
-        await new Promise<void>(resolve => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              resolve();
-            });
-          });
-        });
-      });
-    }
+    await this.waitForPendingIcons();
 
     const elementToTakeScreenShotFrom = options?.element || this.page;
     const isSnapshotRun = process.env.E2E_SKIP_SNAPSHOT !== 'true';
