@@ -416,6 +416,8 @@ test('mdc-menuitemcheckbox', async ({ componentsPage }) => {
    * VISUAL REGRESSION
    */
   await test.step('visual-regression', async () => {
+    // Move mouse away to prevent accidental hover on any menuitemcheckbox after previous interactions
+    await componentsPage.page.mouse.move(0, 0);
     await componentsPage.mount({
       html: `
         <div role="${ROLE.MENU}" style="display: flex; flex-direction: column; gap: 0.5rem">

@@ -88,6 +88,10 @@ const setup = async (args: SetupOptions, isForm = false) => {
 
 test.use({ viewport: { width: 800, height: 1500 } });
 test('mdc-input', async ({ componentsPage, browserName }) => {
+  // Many page remounts across attributes, interactions, form validation, and visual regression
+  // can exceed the default 30s timeout in slower browsers (webkit, msedge, firefox)
+  test.setTimeout(60000);
+
   const input = await setup({
     componentsPage,
     id: 'test-mdc-input',

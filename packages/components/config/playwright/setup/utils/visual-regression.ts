@@ -52,6 +52,12 @@ class VisualRegression {
     await this.page.evaluate(dir => {
       document.documentElement.setAttribute('dir', dir);
     }, direction);
+
+    // wait for the next 2 frames to ensure the direction change is applied
+    // this is necessary to make sure that the browser has time to re-render the page
+    // and apply the new direction before taking a screenshot
+    // otherwise, the screenshot might not reflect the new direction
+    // and the visual regression tests might fail
     await this.waitForNextPaint();
   }
 

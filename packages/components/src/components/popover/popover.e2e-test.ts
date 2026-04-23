@@ -1516,7 +1516,7 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
 
     await expect(popover).not.toHaveAttribute('visible');
     await expect(trigger).not.toBeFocused();
-    await expect(tooltip).not.toBeVisible();
+    await expect(tooltip).not.toHaveAttribute('visible');
   });
 
   await test.step('Focus does return to trigger when popover has focus-back-to-trigger attribute', async () => {
@@ -1552,8 +1552,8 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     // Press Space on action inside popover to open dialog
     await componentsPage.page.keyboard.press(KEYS.ESCAPE);
 
-    await expect(popover).not.toBeVisible();
-    await expect(tooltip).not.toBeVisible();
+    await expect(popover).not.toHaveAttribute('visible');
+    await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
   });
 
@@ -1597,8 +1597,8 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     // Click on backdrop to close popover
     await backdrop.click({ force: true });
 
-    await expect(popover).not.toBeVisible();
-    await expect(tooltip).not.toBeVisible();
+    await expect(popover).not.toHaveAttribute('visible');
+    await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
   });
 
