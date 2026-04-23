@@ -67,6 +67,8 @@ const setup = async (args: SetupOptions, isForm = false) => {
   if (isForm) {
     const form = componentsPage.page.locator('form');
     await form.waitFor();
+    // Wait for the custom element inside the form to upgrade and render its shadow DOM
+    await form.locator('mdc-password input').waitFor();
     return form;
   }
   const text = componentsPage.page.locator('mdc-password');
@@ -189,15 +191,8 @@ test('mdc-password', async ({ componentsPage, browserName }) => {
    */
   await test.step('interactions', async () => {
     await test.step('should the component be focusable with tab', async () => {
-      await setup({
-        componentsPage,
-        trailingButton: true,
-        showButtonAriaLabel: 'show button',
-        hideButtonAriaLabel: 'hide button',
-        secondButtonForFocus: true,
-      });
+      password = await setup(defaultSetupOptions);
       const showHideButton = password.locator('mdc-button[part="trailing-button"]');
-      await setup(defaultSetupOptions);
       const passwordEl = password.locator('input');
       await componentsPage.actionability.pressTab();
       await expect(password).toBeFocused();

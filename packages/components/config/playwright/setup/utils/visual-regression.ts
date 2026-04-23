@@ -36,12 +36,12 @@ class VisualRegression {
   /**
    * Waits for all in-flight icon network requests to complete, then waits for
    * the subsequent Lit re-render and browser paint via a double-rAF.
+   * Always waits for a paint frame to ensure any async icon rendering
+   * (e.g. from cached SVG fetches) has completed.
    */
   private async waitForIconsToRender(): Promise<void> {
-    const hadPendingIcons = await this.waitForPendingIcons();
-    if (hadPendingIcons) {
-      await this.waitForNextPaint();
-    }
+    await this.waitForPendingIcons();
+    await this.waitForNextPaint();
   }
 
   /**

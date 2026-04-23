@@ -77,6 +77,8 @@ const setup = async (args: SetupOptions, isForm = false) => {
   if (isForm) {
     const form = componentsPage.page.locator('form');
     await form.waitFor();
+    // Wait for the custom element inside the form to upgrade and render its shadow DOM
+    await form.locator('mdc-input input').waitFor();
     return form;
   }
   const text = componentsPage.page.locator('mdc-input');
@@ -482,6 +484,7 @@ test('mdc-input', async ({ componentsPage, browserName }) => {
       const mdcInput = form.locator('mdc-input');
       const submitButton = form.locator('mdc-button[type="submit"]');
       const inputEl = mdcInput.locator('input');
+      await expect(inputEl).toBeVisible();
       await componentsPage.actionability.pressTab();
       await expect(mdcInput).toBeFocused();
       await inputEl.fill('He');
