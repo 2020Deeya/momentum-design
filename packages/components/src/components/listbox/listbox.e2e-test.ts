@@ -51,7 +51,8 @@ const setup = async (args: SetupOptions) => {
  */
 const setupChangeListener = async (listbox: Locator): Promise<void> => {
   await listbox.evaluate(el => {
-    (el as any).__pendingChangeDetail = new Promise<any>(resolve => {
+    // eslint-disable-next-line no-param-reassign
+    (el as any).pendingChangeDetail = new Promise<any>(resolve => {
       el.addEventListener('change', (e: Event) => resolve((e as CustomEvent).detail), { once: true });
     });
   });
@@ -59,7 +60,7 @@ const setupChangeListener = async (listbox: Locator): Promise<void> => {
 
 /** Retrieves the event detail captured by a previously registered change listener. */
 const getChangeDetail = (listbox: Locator): Promise<ListBoxChangeEventDetail> =>
-  listbox.evaluate((el: any) => el.__pendingChangeDetail);
+  listbox.evaluate((el: any) => el.pendingChangeDetail);
 // End AI-Assisted
 
 test('mdc-listbox', async ({ componentsPage }) => {
