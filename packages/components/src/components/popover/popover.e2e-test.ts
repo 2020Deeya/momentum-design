@@ -1553,8 +1553,8 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     await componentsPage.page.keyboard.press(KEYS.ESCAPE);
 
     await expect(popover).not.toHaveAttribute('visible');
-    await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
+    await expect(tooltip).not.toHaveAttribute('visible');
   });
 
   await test.step('Tooltip on trigger element does not open if it does not have visual focus when popover is closed', async () => {
@@ -1598,8 +1598,8 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     await backdrop.click({ force: true });
 
     await expect(popover).not.toHaveAttribute('visible');
-    await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
+    await expect(tooltip).not.toHaveAttribute('visible');
   });
 
   await test.step('Popover should determine z-index for backdrop with default values', async () => {
