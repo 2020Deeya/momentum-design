@@ -416,8 +416,6 @@ test('mdc-menuitemcheckbox', async ({ componentsPage }) => {
    * VISUAL REGRESSION
    */
   await test.step('visual-regression', async () => {
-    // Move mouse away to prevent accidental hover on any menuitemcheckbox after previous interactions
-    await componentsPage.page.mouse.move(0, 0);
     await componentsPage.mount({
       html: `
         <div role="${ROLE.MENU}" style="display: flex; flex-direction: column; gap: 0.5rem">
@@ -437,6 +435,8 @@ test('mdc-menuitemcheckbox', async ({ componentsPage }) => {
       `,
       clearDocument: true,
     });
+    // Move mouse away after mount to prevent hover on any menuitemcheckbox
+    await componentsPage.page.mouse.move(0, 0);
     await componentsPage.visualRegression.takeScreenshot('mdc-menuitemcheckbox-default-and-toggle');
     await componentsPage.mount({
       html: `
@@ -457,6 +457,7 @@ test('mdc-menuitemcheckbox', async ({ componentsPage }) => {
       `,
       clearDocument: true,
     });
+    await componentsPage.page.mouse.move(0, 0);
     await componentsPage.visualRegression.takeScreenshot('mdc-menuitemcheckbox-none-and-checkmark');
     await componentsPage.mount({
       html: `
@@ -473,6 +474,7 @@ test('mdc-menuitemcheckbox', async ({ componentsPage }) => {
       `,
       clearDocument: true,
     });
+    await componentsPage.page.mouse.move(0, 0);
     await componentsPage.visualRegression.takeScreenshot('mdc-menuitemcheckbox-secondary-label');
   });
 

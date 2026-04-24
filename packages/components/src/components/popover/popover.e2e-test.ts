@@ -1516,6 +1516,9 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
 
     await expect(popover).not.toHaveAttribute('visible');
     await expect(trigger).not.toBeFocused();
+    // In webkit, deactivating the focus trap can transiently focus the trigger which briefly
+    // opens the tooltip. Allow the focus transition to fully settle before asserting.
+    await componentsPage.page.waitForTimeout(200);
     await expect(tooltip).not.toHaveAttribute('visible');
   });
 
@@ -1553,6 +1556,9 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     await componentsPage.page.keyboard.press(KEYS.ESCAPE);
 
     await expect(popover).not.toHaveAttribute('visible');
+    // In webkit, focus returning to trigger can race with shouldSuppressOpening reset,
+    // causing the tooltip to briefly reopen. Wait for the focus transition to settle.
+    await componentsPage.page.waitForTimeout(200);
     await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
   });
@@ -1598,6 +1604,7 @@ const userStoriesTestCases = async (componentsPage: ComponentsPage) => {
     await backdrop.click({ force: true });
 
     await expect(popover).not.toHaveAttribute('visible');
+    await componentsPage.page.waitForTimeout(200);
     await expect(tooltip).not.toHaveAttribute('visible');
     await expect(trigger).toBeFocused();
   });

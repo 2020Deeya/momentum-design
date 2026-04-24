@@ -109,6 +109,9 @@ test('mdc-select', async ({ componentsPage }) => {
     await expect(tooltip).toBeVisible();
     await expect(tooltip).toHaveText('White and Black are the biggest colors on the spectrum');
 
+    // Wait for tooltip positioning to stabilize (floating-ui may recompute position)
+    await componentsPage.page.waitForTimeout(500);
+
     // Visual regression snapshot of the tooltip
     await componentsPage.visualRegression.takeScreenshot('mdc-select', {
       source: 'userflow',
