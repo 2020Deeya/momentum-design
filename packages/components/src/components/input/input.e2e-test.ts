@@ -86,14 +86,10 @@ const setup = async (args: SetupOptions, isForm = false) => {
   return text;
 };
 
-test.use({ viewport: { width: 800, height: 1500 } });
-test('mdc-input', async ({ componentsPage, browserName }) => {
-  // Many page remounts across attributes, interactions, form validation, and visual regression
-  // can exceed the default 30s timeout in slower browsers (webkit, msedge, firefox)
-  test.setTimeout(60000);
+test.describe('mdc-input', () => {
+  test.use({ viewport: { width: 800, height: 1500 } });
 
-  const input = await setup({
-    componentsPage,
+  const defaultSetupOptions = {
     id: 'test-mdc-input',
     placeholder: 'Placeholder',
     maxlength: 10,
@@ -105,12 +101,13 @@ test('mdc-input', async ({ componentsPage, browserName }) => {
     helpText: 'Help Text',
     secondButtonForFocus: true,
     dataAriaDescribedby: 'custom-helper-text-id', // custom aria-describedby
-  });
+  };
 
   /**
    * ATTRIBUTES
    */
-  await test.step('attributes', async () => {
+  test('attributes', async ({ componentsPage }) => {
+    const input = await setup({ componentsPage, ...defaultSetupOptions });
     await test.step('attributes should be present on component', async () => {
       await expect(input).toHaveAttribute('id', 'test-mdc-input');
       await expect(input).toHaveAttribute('placeholder', 'Placeholder');
@@ -242,7 +239,8 @@ test('mdc-input', async ({ componentsPage, browserName }) => {
   /**
    * INTERACTIONS
    */
-  await test.step('interactions', async () => {
+  test('interactions', async ({ componentsPage, browserName }) => {
+    const input = await setup({ componentsPage, ...defaultSetupOptions });
     const inputEl = input.locator('input');
     await test.step('component should be focusable with tab', async () => {
       await componentsPage.actionability.pressTab();
@@ -642,7 +640,7 @@ test('mdc-input', async ({ componentsPage, browserName }) => {
   /**
    * VISUAL REGRESSION
    */
-  await test.step('visual-regression', async () => {
+  test('visual-regression', async ({ componentsPage }) => {
     const attributes = {
       id: 'test-mdc-input',
       placeholder: 'Placeholder',
@@ -714,7 +712,8 @@ test('mdc-input', async ({ componentsPage, browserName }) => {
   /**
    * ACCESSIBILITY
    */
-  await test.step('accessibility', async () => {
+  test('accessibility', async ({ componentsPage }) => {
+    await setup({ componentsPage, ...defaultSetupOptions });
     await componentsPage.accessibility.checkForA11yViolations('input-default');
   });
 });
