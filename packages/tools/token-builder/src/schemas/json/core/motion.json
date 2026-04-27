@@ -1,0 +1,186 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome",
+    "definitions": {
+        "Welcome": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "motion": {
+                    "$ref": "#/definitions/Motion"
+                }
+            },
+            "required": [
+                "motion"
+            ],
+            "title": "Welcome"
+        },
+        "Motion": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "duration": {
+                    "$ref": "#/definitions/Duration"
+                },
+                "easing": {
+                    "$ref": "#/definitions/Easing"
+                },
+                "delay": {
+                    "$ref": "#/definitions/Delay"
+                },
+                "stagger": {
+                    "$ref": "#/definitions/Stagger"
+                }
+            },
+            "required": [
+                "duration",
+                "easing",
+                "delay",
+                "stagger"
+            ],
+            "title": "Motion"
+        },
+        "Duration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "instant": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "fast": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "normal": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "relaxed": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "slow": {
+                    "$ref": "#/definitions/DurationToken"
+                }
+            },
+            "required": [
+                "instant",
+                "fast",
+                "normal",
+                "relaxed",
+                "slow"
+            ],
+            "title": "Duration"
+        },
+        "Easing": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "standard": {
+                    "$ref": "#/definitions/EasingToken"
+                },
+                "entrance": {
+                    "$ref": "#/definitions/EasingToken"
+                },
+                "exit": {
+                    "$ref": "#/definitions/EasingToken"
+                },
+                "linear": {
+                    "$ref": "#/definitions/EasingToken"
+                }
+            },
+            "required": [
+                "standard",
+                "entrance",
+                "exit",
+                "linear"
+            ],
+            "title": "Easing"
+        },
+        "Delay": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "none": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "short": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "medium": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "long": {
+                    "$ref": "#/definitions/DurationToken"
+                }
+            },
+            "required": [
+                "none",
+                "short",
+                "medium",
+                "long"
+            ],
+            "title": "Delay"
+        },
+        "Stagger": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "tight": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "normal": {
+                    "$ref": "#/definitions/DurationToken"
+                },
+                "relaxed": {
+                    "$ref": "#/definitions/DurationToken"
+                }
+            },
+            "required": [
+                "tight",
+                "normal",
+                "relaxed"
+            ],
+            "title": "Stagger"
+        },
+        "DurationToken": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "value": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "const": "duration"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value",
+                "type"
+            ],
+            "title": "DurationToken"
+        },
+        "EasingToken": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "value": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "const": "cubicBezier"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value",
+                "type"
+            ],
+            "title": "EasingToken"
+        }
+    }
+}
