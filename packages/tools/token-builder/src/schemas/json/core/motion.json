@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$ref": "#/definitions/MotionFile",
   "definitions": {
     "MotionFile": {
@@ -36,52 +36,34 @@
       "title": "TokenCategory"
     },
     "MotionToken": {
-      "anyOf": [
-        {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "string",
-              "pattern": "^\\d+ms$"
-            },
-            "type": {
-              "type": "string",
-              "enum": ["duration"]
-            },
-            "description": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "value",
-            "type"
-          ],
-          "additionalProperties": false,
-          "title": "DurationToken"
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
         },
-        {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "string",
-              "pattern": "^cubic-bezier\\(.+\\)$"
-            },
-            "type": {
-              "type": "string",
-              "enum": ["cubicBezier"]
-            },
-            "description": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "value",
-            "type"
-          ],
-          "additionalProperties": false,
-          "title": "CubicBezierToken"
+        "type": {
+          "type": "string",
+          "enum": ["duration", "cubicBezier"]
+        },
+        "description": {
+          "type": "string"
         }
+      },
+      "required": [
+        "value",
+        "type"
       ],
+      "additionalProperties": false,
+      "if": {
+        "properties": { "type": { "const": "duration" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": { "value": { "type": "string", "pattern": "^\\d+ms$" } }
+      },
+      "else": {
+        "properties": { "value": { "type": "string", "pattern": "^cubic-bezier\\(.+\\)$" } }
+      },
       "title": "MotionToken"
     }
   }
